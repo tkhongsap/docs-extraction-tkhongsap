@@ -16,16 +16,16 @@ export const translations: Translations = {
     'nav.about': 'About',
     'nav.signin': 'Sign In',
     'nav.dashboard': 'Dashboard',
-    'nav.general': 'General Extraction',
-    'nav.templates': 'Templates',
-    'nav.history': 'History',
-    'nav.settings': 'Settings',
+    'nav.general': 'Extract Documents',
+    'nav.templates': 'Document Types',
+    'nav.history': 'Your Documents',
+    'nav.settings': 'Preferences',
     'nav.logout': 'Sign Out',
 
-    // Home
-    'hero.title': 'Intelligent Document Extraction',
-    'hero.subtitle': 'Extract structured data from any document instantly with AI. Bilingual support for English and Thai.',
-    'hero.cta': 'Start for Free',
+    // Home - Emotional, pain-focused copy
+    'hero.title': 'Stop Wasting Hours on Manual Data Entry',
+    'hero.subtitle': 'AI extracts structured data from your documents in seconds, so you can focus on what matters. Works in Thai & English.',
+    'hero.cta': 'Start Free - 100 Pages',
     'pricing.title': 'Simple, Transparent Pricing',
     'pricing.free': 'Free Starter',
     'pricing.pro': 'Pro Business',
@@ -40,26 +40,33 @@ export const translations: Translations = {
     'auth.continue_facebook': 'Continue with Facebook',
     'auth.continue_apple': 'Continue with Apple',
 
-    // Dashboard
-    'dash.welcome': 'Good Morning, User',
-    'dash.quick_start': 'Quick Extraction',
-    'dash.recent': 'Recent Documents',
+    // Dashboard - Personal & welcoming
+    'dash.welcome': 'Welcome back!',
+    'dash.quick_start': 'New Extraction',
+    'dash.recent': 'Pick up where you left off',
     'dash.template_bank': 'Bank Statement',
     'dash.template_invoice': 'Invoice',
     'dash.template_po': 'Purchase Order',
     'dash.template_contract': 'Contract',
-    'dash.general_desc': 'Extract data from any document type',
-    
-    // Extraction
-    'extract.upload_title': 'Upload Document',
-    'extract.upload_desc': 'Drag & drop your file here, or click to browse',
-    'extract.processing': 'Processing...',
-    'extract.results': 'Extraction Results',
+    'dash.general_desc': "Any document, any format - we'll figure it out",
+
+    // Extraction - Supportive language
+    'extract.upload_title': 'Drop your document here',
+    'extract.upload_desc': 'PDF, JPG, or PNG - we handle them all',
+    'extract.processing': 'Working on it...',
+    'extract.processing_sub': 'This usually takes just a few seconds',
+    'extract.results': "Here's what we found",
     'extract.confidence': 'Confidence',
     'extract.export': 'Export',
     'extract.field': 'Field',
     'extract.value': 'Value',
-    
+    'extract.success': 'All done! Your data is ready',
+
+    // Empty states
+    'empty.no_history': 'No documents yet',
+    'empty.no_history_desc': "Upload your first document and we'll remember it here",
+    'empty.get_started': "Let's extract something",
+
     // Common
     'common.upgrade': 'Upgrade Plan',
     'common.usage': 'Monthly Usage',
@@ -71,17 +78,17 @@ export const translations: Translations = {
     'nav.about': 'เกี่ยวกับเรา',
     'nav.signin': 'เข้าสู่ระบบ',
     'nav.dashboard': 'แดชบอร์ด',
-    'nav.general': 'ดึงข้อมูลทั่วไป',
-    'nav.templates': 'แม่แบบ',
-    'nav.history': 'ประวัติ',
+    'nav.general': 'ดึงข้อมูลเอกสาร',
+    'nav.templates': 'ประเภทเอกสาร',
+    'nav.history': 'เอกสารของคุณ',
     'nav.settings': 'ตั้งค่า',
     'nav.logout': 'ออกจากระบบ',
 
-    // Home
-    'hero.title': 'ระบบดึงข้อมูลเอกสารอัจฉริยะ',
-    'hero.subtitle': 'ดึงข้อมูลที่มีโครงสร้างจากเอกสารใดก็ได้ทันทีด้วย AI รองรับทั้งภาษาอังกฤษและภาษาไทย',
-    'hero.cta': 'เริ่มต้นใช้งานฟรี',
-    'pricing.title': 'ราคาที่โปร่งใสและคุ้มค่า',
+    // Home - Emotional, pain-focused copy
+    'hero.title': 'หยุดเสียเวลากรอกข้อมูลด้วยมือ',
+    'hero.subtitle': 'AI ดึงข้อมูลจากเอกสารของคุณในไม่กี่วินาที ให้คุณมีเวลากับสิ่งที่สำคัญกว่า รองรับทั้งภาษาไทยและอังกฤษ',
+    'hero.cta': 'เริ่มใช้ฟรี - 100 หน้า',
+    'pricing.title': 'ราคาที่โปร่งใส ไม่มีค่าใช้จ่ายแอบแฝง',
     'pricing.free': 'เริ่มต้นฟรี',
     'pricing.pro': 'สำหรับธุรกิจ',
     'pricing.pages_month': 'หน้า/เดือน',
@@ -95,25 +102,32 @@ export const translations: Translations = {
     'auth.continue_facebook': 'ดำเนินการต่อด้วย Facebook',
     'auth.continue_apple': 'ดำเนินการต่อด้วย Apple',
 
-    // Dashboard
-    'dash.welcome': 'สวัสดีตอนเช้า',
-    'dash.quick_start': 'เริ่มดึงข้อมูลด่วน',
-    'dash.recent': 'เอกสารล่าสุด',
+    // Dashboard - Personal & welcoming
+    'dash.welcome': 'ยินดีต้อนรับกลับมา!',
+    'dash.quick_start': 'ดึงข้อมูลใหม่',
+    'dash.recent': 'ทำงานต่อจากที่ค้างไว้',
     'dash.template_bank': 'รายการเดินบัญชี',
     'dash.template_invoice': 'ใบแจ้งหนี้',
     'dash.template_po': 'ใบสั่งซื้อ',
     'dash.template_contract': 'สัญญา',
-    'dash.general_desc': 'ดึงข้อมูลจากเอกสารทุกประเภท',
+    'dash.general_desc': 'เอกสารอะไรก็ได้ รูปแบบไหนก็ได้ เราจัดการให้',
 
-    // Extraction
-    'extract.upload_title': 'อัปโหลดเอกสาร',
-    'extract.upload_desc': 'ลากและวางไฟล์ที่นี่ หรือคลิกเพื่อเลือกไฟล์',
-    'extract.processing': 'กำลังประมวลผล...',
-    'extract.results': 'ผลลัพธ์การดึงข้อมูล',
+    // Extraction - Supportive language
+    'extract.upload_title': 'วางเอกสารของคุณที่นี่',
+    'extract.upload_desc': 'PDF, JPG หรือ PNG - เราจัดการได้ทั้งหมด',
+    'extract.processing': 'กำลังทำงาน...',
+    'extract.processing_sub': 'ปกติใช้เวลาไม่กี่วินาที',
+    'extract.results': 'นี่คือข้อมูลที่เราพบ',
     'extract.confidence': 'ความเชื่อมั่น',
     'extract.export': 'ส่งออก',
     'extract.field': 'ฟิลด์',
     'extract.value': 'ค่า',
+    'extract.success': 'เสร็จแล้ว! ข้อมูลพร้อมใช้งาน',
+
+    // Empty states
+    'empty.no_history': 'ยังไม่มีเอกสาร',
+    'empty.no_history_desc': 'อัปโหลดเอกสารแรกของคุณ แล้วเราจะจดจำไว้ที่นี่',
+    'empty.get_started': 'เริ่มดึงข้อมูลกันเถอะ',
 
     // Common
     'common.upgrade': 'อัปเกรดแผน',
