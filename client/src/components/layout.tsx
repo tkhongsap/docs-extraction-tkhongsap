@@ -226,7 +226,7 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
     { href: '/settings', icon: Settings, label: t('nav.settings') },
   ];
 
-  const usagePercent = (user!.usage / user!.limit) * 100;
+  const usagePercent = (user!.monthlyUsage / user!.monthlyLimit) * 100;
 
   return (
     <div className="flex h-screen bg-background">
@@ -275,7 +275,7 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
             <div className="flex justify-between mb-2 text-xs">
               <span className="text-sidebar-foreground/70">{t('common.usage')}</span>
               <span className="font-medium text-sidebar-foreground">
-                {user?.usage} / {user?.limit}
+                {user?.monthlyUsage} / {user?.monthlyLimit}
               </span>
             </div>
             <div className="h-2 w-full bg-sidebar-border rounded-full overflow-hidden">

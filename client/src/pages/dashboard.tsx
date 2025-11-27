@@ -36,7 +36,7 @@ export default function Dashboard() {
     { id: 3, name: 'Contract_Draft_v2.pdf', type: 'Contract', date: 'Yesterday', status: 'Review Needed' },
   ];
 
-  const usagePercent = (user!.usage / user!.limit) * 100;
+  const usagePercent = (user!.monthlyUsage / user!.monthlyLimit) * 100;
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto">
@@ -114,9 +114,9 @@ export default function Dashboard() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  {user?.usage}
+                  {user?.monthlyUsage}
                 </motion.div>
-                <p className="text-sm text-muted-foreground">of {user?.limit} pages</p>
+                <p className="text-sm text-muted-foreground">of {user?.monthlyLimit} pages</p>
               </div>
 
               <div>
@@ -130,7 +130,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground mt-2">
                   <span>0</span>
-                  <span>{user?.limit} limit</span>
+                  <span>{user?.monthlyLimit} limit</span>
                 </div>
               </div>
 
