@@ -1,19 +1,24 @@
 import { Link, useLocation } from "wouter";
+import { motion } from "framer-motion";
 import { useAuth } from "@/lib/mock-auth";
 import { useLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Files, 
-  History, 
-  Settings, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  FileText,
+  Files,
+  History,
+  Settings,
+  LogOut,
   Globe,
   Menu,
-  X
+  X,
+  Check,
+  Lock,
+  ShieldCheck,
+  ArrowRight
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -21,20 +26,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { progressAnimation } from "@/lib/animations";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
-  
+
   if (isAuthenticated) {
     return <AuthenticatedLayout>{children}</AuthenticatedLayout>;
   }
-  
+
   return <PublicLayout>{children}</PublicLayout>;
 }
 
 function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
-  
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,28 +64,49 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
   const { t } = useLanguage();
   const { login } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background font-sans flex flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2 font-bold text-xl text-primary">
-            <div className="h-8 w-8 rounded bg-primary flex items-center justify-center text-white">
+      <header
+        className={cn(
+          "sticky top-0 z-50 w-full border-b transition-all duration-200",
+          isScrolled
+            ? "bg-background/95 backdrop-blur-md border-border shadow-sm"
+            : "bg-transparent border-transparent"
+        )}
+      >
+        <div className="container flex h-16 items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2 font-semibold text-xl text-foreground">
+            <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center text-white">
               <FileText className="h-5 w-5" />
             </div>
-            DocExtract
-          </div>
+            <span className="tracking-tight">DocExtract</span>
+          </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link href="/" className="transition-colors hover:text-primary">{t('nav.home')}</Link>
-            <Link href="/#pricing" className="transition-colors hover:text-primary">{t('nav.pricing')}</Link>
-            <Link href="/#about" className="transition-colors hover:text-primary">{t('nav.about')}</Link>
-            <div className="h-4 w-px bg-border" />
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <Link href="/" className="text-muted-foreground transition-colors hover:text-foreground">{t('nav.home')}</Link>
+            <Link href="/#pricing" className="text-muted-foreground transition-colors hover:text-foreground">{t('nav.pricing')}</Link>
+            <Link href="/#about" className="text-muted-foreground transition-colors hover:text-foreground">{t('nav.about')}</Link>
+          </nav>
+
+          <div className="hidden md:flex items-center gap-3">
             <LanguageSwitcher />
             <Button variant="ghost" onClick={() => login()}>{t('nav.signin')}</Button>
-            <Button onClick={() => login()}>{t('hero.cta')}</Button>
-          </nav>
+            <Button onClick={() => login()}>
+              {t('hero.cta')}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
 
           {/* Mobile Menu Toggle */}
           <div className="flex items-center gap-4 md:hidden">
@@ -92,20 +119,97 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t p-4 space-y-4 bg-background">
-            <Link href="/" className="block text-sm font-medium" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.home')}</Link>
-            <Link href="/#pricing" className="block text-sm font-medium" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.pricing')}</Link>
-            <Button className="w-full" onClick={() => login()}>{t('nav.signin')}</Button>
-          </div>
+          <motion.div
+            className="md:hidden border-t p-6 space-y-4 bg-background"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <Link href="/" className="block text-sm font-medium py-2" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.home')}</Link>
+            <Link href="/#pricing" className="block text-sm font-medium py-2" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.pricing')}</Link>
+            <Link href="/#about" className="block text-sm font-medium py-2" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.about')}</Link>
+            <div className="pt-4 space-y-3">
+              <Button variant="outline" className="w-full" onClick={() => login()}>{t('nav.signin')}</Button>
+              <Button className="w-full" onClick={() => login()}>{t('hero.cta')}</Button>
+            </div>
+          </motion.div>
         )}
       </header>
       <main className="flex-1">{children}</main>
-      <footer className="border-t py-8 bg-muted/20">
-        <div className="container px-4 text-center text-sm text-muted-foreground">
-          © 2024 DocExtract. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t py-16 bg-muted/20">
+      <div className="container px-6 mx-auto">
+        <div className="grid md:grid-cols-4 gap-12 mb-12">
+          {/* Brand */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 font-semibold text-lg">
+              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-white">
+                <FileText className="h-4 w-4" />
+              </div>
+              DocExtract
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Secure document extraction for Thai businesses. Extract structured data in seconds.
+            </p>
+          </div>
+
+          {/* Product Links */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-sm">Product</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link href="/#about" className="hover:text-foreground transition-colors">Features</Link></li>
+              <li><Link href="/#pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
+              <li><Link href="/" className="hover:text-foreground transition-colors">Templates</Link></li>
+              <li><Link href="/" className="hover:text-foreground transition-colors">API</Link></li>
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-sm">Company</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li><Link href="/" className="hover:text-foreground transition-colors">About</Link></li>
+              <li><Link href="/" className="hover:text-foreground transition-colors">Contact</Link></li>
+              <li><Link href="/" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/" className="hover:text-foreground transition-colors">Terms of Service</Link></li>
+            </ul>
+          </div>
+
+          {/* Security Trust Indicators */}
+          <div className="space-y-4">
+            <h4 className="font-semibold text-sm">Security</h4>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-emerald-500" />
+                Bank-grade Encryption
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-emerald-500" />
+                PDPA Compliant
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-emerald-500" />
+                Auto-delete in 24hrs
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-emerald-500" />
+                SOC 2 Type II
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="pt-8 border-t text-center text-sm text-muted-foreground">
+          <p>© 2024 DocExtract. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
   );
 }
 
@@ -122,63 +226,92 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
     { href: '/settings', icon: Settings, label: t('nav.settings') },
   ];
 
+  const usagePercent = (user!.usage / user!.limit) * 100;
+
   return (
-    <div className="flex h-screen bg-muted/10">
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <aside className="hidden w-64 flex-col border-r bg-sidebar text-sidebar-foreground md:flex">
         <div className="flex h-16 items-center px-6 border-b border-sidebar-border">
-          <div className="flex items-center gap-2 font-bold text-xl text-sidebar-primary-foreground">
-            <div className="h-8 w-8 rounded bg-sidebar-primary flex items-center justify-center text-white">
-              <FileText className="h-5 w-5" />
+          <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-lg text-sidebar-foreground">
+            <div className="h-8 w-8 rounded-lg bg-sidebar-primary flex items-center justify-center text-white">
+              <FileText className="h-4 w-4" />
             </div>
             DocExtract
-          </div>
-        </div>
-        
-        <div className="flex-1 py-6 px-4 space-y-1">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              <div className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer",
-                location === item.href || (item.href !== '/dashboard' && location.startsWith(item.href)) 
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                  : "text-sidebar-foreground/70"
-              )}>
-                <item.icon className="h-4 w-4" />
-                {item.label}
-              </div>
-            </Link>
-          ))}
+          </Link>
         </div>
 
-        <div className="p-4 border-t border-sidebar-border">
-          <div className="mb-4 p-3 rounded-lg bg-sidebar-accent/50 text-xs">
-            <div className="flex justify-between mb-2 text-sidebar-foreground/70">
-              <span>{t('common.usage')}</span>
-              <span>{user?.usage} / {user?.limit}</span>
+        <nav className="flex-1 py-6 px-3 space-y-1">
+          {navItems.map((item) => {
+            const isActive = location === item.href || (item.href !== '/dashboard' && location.startsWith(item.href));
+            return (
+              <Link key={item.href} href={item.href}>
+                <div className={cn(
+                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer",
+                  isActive
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                    : "text-sidebar-foreground/70"
+                )}>
+                  {/* Active indicator bar */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 rounded-full bg-sidebar-primary"
+                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  )}
+                  <item.icon className="h-4 w-4 ml-1" />
+                  {item.label}
+                </div>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-sidebar-border space-y-4">
+          {/* Usage Widget */}
+          <div className="p-4 rounded-xl bg-sidebar-accent/50">
+            <div className="flex justify-between mb-2 text-xs">
+              <span className="text-sidebar-foreground/70">{t('common.usage')}</span>
+              <span className="font-medium text-sidebar-foreground">
+                {user?.usage} / {user?.limit}
+              </span>
             </div>
-            <div className="h-1.5 w-full bg-sidebar-border rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-sidebar-primary" 
-                style={{ width: `${(user!.usage / user!.limit) * 100}%` }} 
+            <div className="h-2 w-full bg-sidebar-border rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-sidebar-primary to-sidebar-primary/70 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${usagePercent}%` }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               />
             </div>
-            {user!.usage / user!.limit > 0.8 && (
-              <div className="mt-2 text-amber-400 font-medium">Limit approaching</div>
+            {usagePercent > 80 && (
+              <div className="mt-3">
+                <Button size="sm" variant="outline" className="w-full text-xs bg-sidebar-accent border-sidebar-border hover:bg-sidebar-accent/80">
+                  {t('common.upgrade')}
+                </Button>
+              </div>
             )}
           </div>
-          
+
+          {/* User Profile */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground font-medium">
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full bg-sidebar-primary/20 flex items-center justify-center text-sidebar-primary font-medium">
                 {user?.name.charAt(0)}
               </div>
               <div className="text-sm">
-                <div className="font-medium truncate max-w-[100px]">{user?.name}</div>
+                <div className="font-medium truncate max-w-[100px] text-sidebar-foreground">{user?.name}</div>
                 <div className="text-xs text-sidebar-foreground/50">Pro Plan</div>
               </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={logout} className="text-sidebar-foreground/50 hover:text-sidebar-foreground">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={logout}
+              className="text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+            >
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
@@ -188,13 +321,21 @@ function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="flex h-16 items-center justify-between border-b bg-background px-6">
-          <h1 className="text-lg font-semibold">
+          <h1 className="text-lg font-semibold tracking-tight">
             {navItems.find(i => location === i.href)?.label || 'DocExtract'}
           </h1>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+          </div>
         </header>
-        <main className="flex-1 overflow-auto p-6">
-          {children}
+        <main className="flex-1 overflow-auto p-6 bg-muted/20">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {children}
+          </motion.div>
         </main>
       </div>
     </div>
