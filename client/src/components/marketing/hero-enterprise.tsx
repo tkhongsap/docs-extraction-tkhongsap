@@ -108,7 +108,7 @@ export function HeroEnterprise({ className }: HeroEnterpriseProps) {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white/30 text-white hover:bg-white/10 h-12 px-8 text-base"
+                className="bg-transparent border-white/30 text-white hover:bg-white/10 h-12 px-8 text-base"
               >
                 <Play className="mr-2 h-4 w-4" />
                 {t('hero.cta_secondary')}
