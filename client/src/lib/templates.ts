@@ -59,3 +59,4 @@ export function getTemplateById(id: string, t: (key: string) => string): Templat
   return getTemplates(t).find(template => template.id === id);
 }
 
+
